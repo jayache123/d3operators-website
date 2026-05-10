@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3 Operators — We Don't Advise. We Execute.</title>
+  <meta name="description" content="Built Uber Africa from 0 → $600M+ in annual gross bookings. D3 Operators embeds inside growth-stage companies and moves revenue like operators — not consultants.">
+  <meta property="og:title" content="D3 Operators — We Don't Advise. We Execute.">
+  <meta property="og:description" content="Interim growth leadership that owns outcomes. No decks. No theory. Just measurable results, fast.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://d3operators.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F2EC;
+      --cream-dark: #EAE7E0;
+      --ink: #1a1a18;
+      --ink-mid: #5F5E5A;
+      --ink-light: #888780;
+      --rust: #C8502A;
+      --border: rgba(26,26,24,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Layout */
+    .page { max-width: 780px; margin: 0 auto; background: var(--cream); }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 3.5rem 2.5rem 3rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--rust);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Instrument Serif', serif;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .logo-mark:hover {
+      transform: scale(1.06);
+      box-shadow: 0 4px 12px rgba(200,80,42,0.25);
+    }
+
+    .logo-text {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .hero-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: 44px;
+      line-height: 1.1;
+      font-weight: 400;
+      color: var(--ink);
+      max-width: 560px;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 520px;
+      font-weight: 300;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.25rem;
+      background: var(--rust);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 13px 26px;
+      border-radius: 4px;
+      text-decoration: none;
+      width: fit-content;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .cta-btn:hover {
+      background: #b54424;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(200,80,42,0.28);
+    }
+    .cta-btn:active { transform: translateY(0); }
+
+    /* ── Sections ── */
+    .section {
+      padding: 2.75rem 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.22;
+      margin-bottom: 1rem;
+      color: var(--ink);
+    }
+
+    .section-body {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+
+    /* Services inline */
+    .levers-intro {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      font-weight: 300;
+      margin-top: 1.1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .services-inline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2px 0;
+      font-size: 14px;
+      color: var(--ink-mid);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+    .services-inline span { color: var(--ink); font-weight: 400; }
+    .services-inline .sep { color: var(--rust); padding: 0 10px; font-weight: 300; }
+
+    /* ── D3 Method cards ── */
+    .d3-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 1.75rem;
+    }
+
+    .d3-card {
+      background: var(--cream-dark);
+      border-radius: 10px;
+      padding: 1.4rem 1.25rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .d3-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26,26,24,0.07);
+    }
+
+    .d3-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      font-style: italic;
+      color: var(--rust);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+
+    .d3-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+    }
+
+    .d3-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+
+    /* ── Team ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 1.75rem;
+    }
+
+    .team-card {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.25rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .team-card:hover {
+      border-color: rgba(200,80,42,0.3);
+      box-shadow: 0 4px 16px rgba(26,26,24,0.06);
+    }
+
+    .team-role {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.4rem;
+    }
+
+    .team-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 21px;
+      font-weight: 400;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+    }
+
+    .team-bio {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+
+    /* ── Stats ── */
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      margin-top: 1.5rem;
+    }
+
+    .stat-item {
+      background: var(--cream-dark);
+      border-radius: 7px;
+      padding: 1rem 0.75rem;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: 'Instrument Serif', serif;
+      font-size: 23px;
+      font-style: italic;
+      color: var(--rust);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--ink-mid);
+      line-height: 1.35;
+      font-weight: 300;
+    }
+
+    /* ── Who it's for ── */
+    .fit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+      margin-top: 1.75rem;
+    }
+
+    .fit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+
+    .fit-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--rust);
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    /* ── Engagement model ── */
+    .engage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 1.75rem;
+    }
+
+    .engage-card {
+      border-left: 2px solid var(--rust);
+      padding: 0.85rem 1rem;
+      transition: background 0.2s ease;
+      border-radius: 0 4px 4px 0;
+    }
+    .engage-card:hover { background: rgba(200,80,42,0.04); }
+
+    .engage-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: var(--ink);
+    }
+
+    .engage-desc {
+      font-size: 12.5px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      font-weight: 300;
+    }
+
+    /* ── Close ── */
+    .close-section {
+      padding: 3.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .close-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.2;
+      max-width: 460px;
+      color: var(--ink);
+    }
+    .close-headline em { font-style: italic; color: var(--rust); }
+
+    .close-sub {
+      font-size: 14.5px;
+      color: var(--ink-mid);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 1.5rem 2.5rem 2rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .footer-brand {
+      font-family: 'Instrument Serif', serif;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .footer-tag {
+      font-size: 11px;
+      color: var(--ink-light);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-contact {
+      font-size: 11.5px;
+      color: var(--ink-light);
+      font-weight: 300;
+      margin-top: 6px;
+    }
+    .footer-contact a {
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .footer-contact a:hover { color: var(--rust); }
+
+    /* ── Responsive ── */
+    @media (max-width: 620px) {
+      .hero { padding: 2rem 1.5rem 2.25rem; gap: 1rem; }
+      .hero-headline { font-size: 32px; }
+      .section { padding: 2.25rem 1.5rem; }
+      .close-section { padding: 2.5rem 1.5rem; }
+      .footer { padding: 1.5rem; }
+
+      .d3-grid { grid-template-columns: 1fr; gap: 10px; }
+      .team-grid { grid-template-columns: 1fr; gap: 10px; }
+      .engage-grid { grid-template-columns: 1fr; gap: 10px; }
+      .fit-grid { grid-template-columns: 1fr; gap: 10px; }
+      .stat-bar { grid-template-columns: 1fr 1fr; gap: 3px; }
+
+      .footer-top { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .close-headline { font-size: 28px; }
+    }
+
+    @media (max-width: 380px) {
+      .hero-headline { font-size: 27px; }
+      .stat-bar { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="logo-row reveal">
+      <div class="logo-mark">D³</div>
+      <span class="logo-text">D3 Operators</span>
+    </div>
+    <h1 class="hero-headline reveal reveal-delay-1">We don't advise.<br><em>We execute.</em></h1>
+    <p class="hero-sub reveal reveal-delay-2">Built Uber Africa from 0 → $600M+ in annual gross bookings. Now we embed inside growth-stage companies and move revenue like operators — not consultants. No decks. No theory. Just measurable results, fast.</p>
+    <a href="mailto:lindsey@d3operators.com" class="cta-btn reveal reveal-delay-3">Work with us</a>
+  </header>
+
+  <!-- The Gap We Fill -->
+  <section class="section">
+    <div class="section-label reveal">The Gap We Fill</div>
+    <h2 class="section-heading reveal reveal-delay-1">Hiring C-suite too early is expensive.<br>Too late slows you down.</h2>
+    <p class="section-body reveal reveal-delay-2">Most companies don't have a strategy problem. They have an execution problem. We step in as interim growth leadership — owning outcomes, building the engine that drives revenue.</p>
+    <p class="levers-intro reveal reveal-delay-2">We focus on the few levers that actually move revenue:</p>
+    <div class="services-inline reveal reveal-delay-3">
+      <span>Pricing + packaging</span><span class="sep">/</span><span>Funnel + conversion</span><span class="sep">/</span><span>Partnerships + business development</span><span class="sep">/</span><span>Global expansion</span><span class="sep">/</span><span>Operational bottlenecks</span>
+    </div>
+  </section>
+
+  <!-- The D3 Method -->
+  <section class="section">
+    <div class="section-label reveal">The D3 Method</div>
+    <h2 class="section-heading reveal reveal-delay-1">Diagnose. Deploy. Drive.</h2>
+    <p class="section-body reveal reveal-delay-1">A simple framework, executed with operator intensity. If it doesn't move revenue, we don't spend time on it.</p>
+    <div class="d3-grid">
+      <div class="d3-card reveal reveal-delay-1">
+        <div class="d3-num">01</div>
+        <div class="d3-title">Diagnose</div>
+        <div class="d3-desc">We go deep on your data, funnel, pricing, team, and ops — identifying the highest-leverage opportunities to drive revenue quickly.</div>
+      </div>
+      <div class="d3-card reveal reveal-delay-2">
+        <div class="d3-num">02</div>
+        <div class="d3-title">Deploy</div>
+        <div class="d3-desc">We embed directly into your team, design the internal systems, and execute. No handoffs. No waiting. We build the machine while running it.</div>
+      </div>
+      <div class="d3-card reveal reveal-delay-3">
+        <div class="d3-num">03</div>
+        <div class="d3-title">Drive</div>
+        <div class="d3-desc">We track results weekly, double down on what works, and make sure the system runs without us. Everything tied to measurable outcomes — then handed off cleanly.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Team -->
+  <section class="section">
+    <div class="section-label reveal">The Team</div>
+    <h2 class="section-heading reveal reveal-delay-1">Global operators.<br>Every sense of the word.</h2>
+    <div class="team-grid">
+      <div class="team-card reveal reveal-delay-1">
+        <div class="team-role">The Rainmaker</div>
+        <div class="team-name">Lindsey Elkin</div>
+        <div class="team-bio">One of Uber's first global employees. Founded, raised, and scaled across multiple companies and 30+ countries. Knows what it takes from both sides of the table.</div>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <div class="team-role">The Engine</div>
+        <div class="team-name">Jon Ayache</div>
+        <div class="team-bio">Head of Operations Sub-Saharan Africa at Uber. Co-founder of LIFT Airline. Built under pressure in markets with no playbook — and scaled them anyway. Where operator instinct meets analytical rigor.</div>
+      </div>
+    </div>
+    <div class="stat-bar">
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-val">$600M+</div>
+        <div class="stat-lbl">Annual gross bookings<br>built at Uber Africa</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-val">60K+</div>
+        <div class="stat-lbl">Drivers scaled across<br>a continent</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-val">30+</div>
+        <div class="stat-lbl">Countries<br>operated across</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-val">0→1</div>
+        <div class="stat-lbl">No playbook.<br>No excuses.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who This Is For -->
+  <section class="section">
+    <div class="section-label reveal">Who This Is For</div>
+    <h2 class="section-heading reveal reveal-delay-1">Growth-stage companies<br>at an inflection point.</h2>
+    <div class="fit-grid">
+      <div class="fit-item reveal reveal-delay-1"><div class="fit-dot"></div><span>Teams preparing to hire C-suite but not there yet</span></div>
+      <div class="fit-item reveal reveal-delay-1"><div class="fit-dot"></div><span>Founders who need senior execution in the interim</span></div>
+      <div class="fit-item reveal reveal-delay-2"><div class="fit-dot"></div><span>Companies stuck at a growth plateau</span></div>
+      <div class="fit-item reveal reveal-delay-2"><div class="fit-dot"></div><span>Businesses where speed matters more than process</span></div>
+    </div>
+  </section>
+
+  <!-- Engagement Model -->
+  <section class="section">
+    <div class="section-label reveal">Engagement Model</div>
+    <h2 class="section-heading reveal reveal-delay-1">Small by design.</h2>
+    <div class="engage-grid">
+      <div class="engage-card reveal reveal-delay-1">
+        <div class="engage-title">6–12 week sprints</div>
+        <div class="engage-desc">Embedded growth engagements with defined outcomes from day one.</div>
+      </div>
+      <div class="engage-card reveal reveal-delay-2">
+        <div class="engage-title">Ruthlessly selective</div>
+        <div class="engage-desc">We choose our clients as carefully as they choose us.</div>
+      </div>
+      <div class="engage-card reveal reveal-delay-3">
+        <div class="engage-title">Direct senior access</div>
+        <div class="engage-desc">No account managers. You work with the operators who've done it before.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Close -->
+  <section class="close-section">
+    <h2 class="close-headline reveal">If you want another strategy deck,<br><em>we're not the right fit.</em></h2>
+    <p class="close-sub reveal reveal-delay-1">If you want operators who come in, build the system, and actually move your numbers — let's build.</p>
+    <a href="mailto:lindsey@d3operators.com" class="cta-btn reveal reveal-delay-2">Let's build</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-top">
+      <span class="footer-brand">D3 Operators</span>
+      <span class="footer-tag">d3operators.com · NYC — The World</span>
+    </div>
+    <div class="footer-tag">Diagnose · Deploy · Drive</div>
+    <div class="footer-contact">
+      <a href="mailto:lindsey@d3operators.com">lindsey@d3operators.com</a> · 610 937 7658
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
