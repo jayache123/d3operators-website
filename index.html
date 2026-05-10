@@ -669,14 +669,37 @@
       .problem-cols,
       .team-grid,
       .fit-cols { grid-template-columns: 1fr; }
-      .method-grid { grid-template-columns: 1fr; }
-      .engage-grid { grid-template-columns: 1fr; }
+      .method-grid { grid-template-columns: 1fr 1fr; }
+      .engage-grid { grid-template-columns: 1fr 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
       .stat-cell:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.06); }
-      .hero-stats { flex-direction: column; width: auto; border: none; gap: 0; }
-      .hero-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
-      .hero-stat:last-child { border-bottom: none; }
+      /* Hero stats: compact 3-col horizontal strip */
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .hero-stat {
+        padding: 16px 14px;
+        border-right: 1px solid rgba(255,255,255,0.08);
+        border-bottom: none;
+      }
+      .hero-stat:last-child { border-right: none; }
+      .hero-stat-val { font-size: 20px; }
+      .hero-stat-lbl { font-size: 9px; }
+      /* Tighten column gap when stacked */
+      .problem-cols { gap: 28px; margin-top: 2.5rem; }
+      .team-grid { gap: 16px; }
+      .fit-cols { gap: 2px; }
+      .method-grid { gap: 2px; }
+    }
+    @media (max-width: 640px) {
+      .method-grid { grid-template-columns: 1fr; }
+      .engage-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
       .stats-grid { grid-template-columns: 1fr; }
@@ -684,9 +707,23 @@
       nav { padding: 16px 20px; }
       .nav-cta { padding: 8px 14px; font-size: 10px; }
       .nav-wordmark { display: none; }
+      /* Tighter section rhythm on small screens */
+      .label { margin-bottom: 1.5rem; }
+      .sh { font-size: clamp(28px, 8vw, 34px); }
+      .method-num { font-size: 52px; margin-bottom: 0.75rem; }
+      .method-card { padding: 28px 24px; }
+      .team-card { padding: 28px 20px; }
+      .problem-cols { gap: 20px; margin-top: 2rem; }
+      .svc { padding: 12px 0; font-size: 13px; }
+      /* Full-width CTA on close section */
+      .close-wrap .hero-cta { width: 100%; justify-content: center; }
+      /* Hero */
+      .hero-sub { max-width: 100%; }
+      .hero-headline { font-size: clamp(42px, 11vw, 56px); }
+      /* Footer */
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
       .footer-meta { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .close-wrap { padding: clamp(60px, 10vw, 100px) var(--gutter); }
+      .close-wrap { padding: clamp(56px, 10vw, 80px) var(--gutter); }
     }
   </style>
 </head>
