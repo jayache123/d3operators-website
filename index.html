@@ -19,15 +19,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cream: #F5F2EC;
-      --cream-dark: #EAE7E0;
-      --ink: #0f0f0d;
-      --ink-mid: #5F5E5A;
-      --ink-light: #888780;
-      --rust: #C8502A;
+      --cream: #F3F0E9;
+      --cream-dark: #E8E4DC;
+      --ink: #131210;
+      --ink-mid: #4D4C48;
+      --ink-light: #7E7D78;
+      --rust: #C04928;
       --border-dark: rgba(255,255,255,0.07);
-      --border-light: rgba(15,15,13,0.10);
-      --gutter: clamp(24px, 6vw, 96px);
+      --border-light: rgba(19,18,16,0.09);
+      --gutter: clamp(20px, 5vw, 80px);
     }
 
     html { scroll-behavior: smooth; }
@@ -99,13 +99,13 @@
 
     /* ── Hero ── */
     .hero {
-      min-height: 100vh;
+      min-height: 92vh;
       background: var(--ink);
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
-      padding: 140px var(--gutter) 100px;
+      padding: 110px var(--gutter) 72px;
     }
     .hero-orb {
       position: absolute;
@@ -276,7 +276,7 @@
     }
 
     /* ── Shared section ── */
-    .section { padding: clamp(72px, 9vw, 130px) var(--gutter); }
+    .section { padding: clamp(48px, 5vw, 72px) var(--gutter); }
     .section--dark { background: var(--ink); }
     .section--dark-noise {
       background: var(--ink);
@@ -360,7 +360,7 @@
       font-size: clamp(13px, 1.1vw, 15px);
       font-weight: 400;
       color: var(--ink);
-      opacity: 0.45;
+      opacity: 0.65;
       cursor: default;
       transition: opacity 0.25s;
     }
@@ -383,7 +383,7 @@
       margin-top: 3.5rem;
     }
     .method-card {
-      background: var(--cream-dark);
+      background: var(--ink);
       padding: clamp(28px, 3.5vw, 52px) clamp(24px, 3vw, 44px);
       position: relative;
       overflow: hidden;
@@ -403,24 +403,24 @@
       font-family: 'Instrument Serif', serif;
       font-size: clamp(64px, 8vw, 100px);
       font-style: italic;
-      color: var(--rust);
-      opacity: 0.12;
+      color: #fff;
+      opacity: 0.07;
       line-height: 1;
       margin-bottom: 1.25rem;
       transition: opacity 0.3s;
     }
-    .method-card:hover .method-num { opacity: 0.3; }
+    .method-card:hover .method-num { opacity: 0.18; }
     .method-title {
       font-family: 'Instrument Serif', serif;
       font-size: clamp(22px, 2.2vw, 30px);
       font-weight: 400;
       margin-bottom: 0.9rem;
-      color: var(--ink);
+      color: #fff;
     }
     .method-desc {
       font-size: 14px;
       line-height: 1.75;
-      color: var(--ink-mid);
+      color: rgba(255,255,255,0.48);
       font-weight: 300;
     }
 
@@ -479,13 +479,14 @@
       margin-top: 3.5rem;
     }
     .team-card {
-      background: var(--cream-dark);
+      background: #fff;
       padding: clamp(32px, 4vw, 56px);
+      border: 1px solid var(--border-light);
     }
     .team-avatar {
       width: 56px; height: 56px;
       border-radius: 50%;
-      background: var(--cream);
+      background: var(--cream-dark);
       border: 1px solid var(--border-light);
       display: flex;
       align-items: center;
@@ -595,7 +596,7 @@
     /* ── Close ── */
     .close-wrap {
       background: var(--ink);
-      padding: clamp(88px, 11vw, 150px) var(--gutter);
+      padding: clamp(64px, 7vw, 100px) var(--gutter);
       position: relative;
       overflow: hidden;
     }
@@ -762,7 +763,7 @@
 </section>
 
 <!-- D3 Method -->
-<section class="section" style="padding-top:0" id="method">
+<section class="section" style="border-top: 1px solid var(--border-light)" id="method">
   <div class="inner">
     <div class="label"><span>The D3 Method</span></div>
     <h2 class="sh">Diagnose. Deploy. Drive.</h2>
